@@ -1,0 +1,19 @@
+// Import page-specific CSS files here.
+@import "home";
+@import "container";
+@import "car_show";
+@import "booking";
+@import "footer";
+@import "form";
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+#search-button {
+  background-color: $main;
+}

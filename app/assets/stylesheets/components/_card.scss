@@ -1,0 +1,60 @@
+.link-container a {
+  color: black;
+  text-decoration: none;
+}
+
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+
+  &:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    transform: scale(1.01);
+  }
+}
+
+.carousel-item {
+  height: 220px;
+}
+
+.carousel-item img {
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+// .card-image img {
+//   object-fit: cover;
+//   height: 100%; /* Ensure the height is set to 100% to fill the container */
+//   width: 100%; /* Ensure the width is set to 100% to fill the container */
+// }
+
+.card-details-1 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-details-2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-text {
+  margin-bottom: 4px;
+}
+
+.card-title {
+  margin-bottom: 0px;
+}
+
+.card-price {
+  margin-bottom: 4px;
+}

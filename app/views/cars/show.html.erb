@@ -1,0 +1,136 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+      <div class="col text-center" id="car-show-main-header">
+        <% if @car.user == current_user %>
+          <h1>Your <%= @car.brand %> <%= @car.model %>
+            <%= link_to car_path(@car), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove your car from RENTR?"} do %>
+              <i class="fa-solid fa-trash"></i>
+            <% end %>
+          </h1>
+        <% else %>
+          <h1><%= @car.brand %> <%= @car.model %></h1>
+        <% end %>
+      </div>
+  </div>
+</div>
+
+<div class="container mt-4">
+  <div class="car-header-info">
+    <%= link_to :back do %>
+      <p><i class="fa-solid fa-left-long"></i></p>
+    <% end %>
+    <p>|</p>
+    <p><%= @car.brand %></p>
+    <p>|</p>
+    <p><%= @car.model %></p>
+  </div>
+
+  <div class="car-main-info">
+    <div id="cars-carousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner w-100">
+        <% @car.photos.each_with_index do |photo, index| %>
+          <div class="car-show-item carousel-item <%= 'active' if index == 0%>" >
+            <%= cl_image_tag photo.key, class: 'd-block w-100 show-car' %>
+          </div>
+        <% end %>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#cars-carousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#cars-carousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    <div class="car-main-specs">
+      <div class="text">
+        <h3><%= @car.brand %> <%= @car.model %></h3>
+        <p><strong>Transmission</strong>: <%= @car.transmission %></p>
+        <p><strong>Found in</strong>: <%= @car.location %></p>
+        <p><strong>Price per day</strong>: <%= @car.day_rate %></p>
+        <p><strong>Wouldn't you like to know...</strong> </p>
+        <p><%= @car.description %></p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="gradient">
+  <div class="car-show-secondary-section">
+
+    <% if current_user %>
+      <% unless @car.user == current_user %>
+        <div class="car-main-specs" id="booking-form-container">
+          <h3 class="car-show-secondary-section-title text-center mb-4">Book Now!</h3>
+          <div class="booking-form">
+            <%= simple_form_for [@car, @booking] do |f| %>
+              <% if @booking.errors.any? && @booking.errors.include?(:base) %>
+                <p id="error-message"><%= @booking.errors[:base].first %></p>
+              <% end %>
+              <div data-controller="datepicker" data-datepicker-booked-value="<%= @booked_dates.to_json %>" data-datepicker-rate-value="<%= @daily_rate.to_json %>">
+                <%= f.input :start_date,
+                  as: :string,
+                  label: 'Select your booking dates',
+                  label_html: { class: 'formLabelStyling' },
+                  input_html: { data: { datepicker_target: "start", action: "change->datepicker#update" }, class: "formInputStyling" } %>
+                <%= f.input :end_date,
+                  as: :hidden,
+                  input_html: { data: { datepicker_target: "end" } } %>
+                <h6 class="d-flex justify-content-end bolded mt-5" data-datepicker-target="days"></h6>
+                <h6 class="d-flex justify-content-end bolded mt-3" data-datepicker-target="cost"></h6>
+                <h4 class="d-flex justify-content-end bolded mt-3" style="font-weight: 600;" data-datepicker-target="total" id="form-total"></h4>
+              </div>
+                <%= f.submit input_html = { class: 'formButtonStyling' } %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="action-booking-main-specs">
+          <h3 class="car-show-secondary-section-title text-center mb-4">My Bookings</h3>
+          <div class="your-active-bookings">
+            <% if Booking.where(car: @car, user: current_user).any? %>
+              <% Booking.where(car: @car, user: current_user).sort_by(& :id).each do |booking| %>
+                <div class="your-active-booking-details">
+                  <div class="your-active-booking-details-title">
+                    <p>Booking Reference: <%= booking.id %></p>
+                    <%= link_to booking_path(booking), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to cancel this booking?"} do %>
+                      <i class="fa-solid fa-trash"></i>
+                    <% end %>
+                  </div>
+
+                  <p>The Car: <%= booking.car.brand %> <%= booking.car.model %></p>
+                  <p>Booking Dates: <%= booking.start_date.strftime('%b %d %Y') %> <%= booking.end_date.strftime('%b %d %Y') %></p>
+                  <p>Total Cost: £<%= ((booking.end_date - booking.start_date) * booking.car.day_rate).round(2) %></p>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="text-start">You don't have any booking for this car</p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if @car.user == current_user %>
+        <div class="active-booking-main-specs w-100">
+          <h3 class="car-show-secondary-section-title text-center mb-4">Active bookings for your car</h3>
+          <div class="active-bookings">
+            <% if @car.bookings.any? %>
+              <% @car.bookings.sort_by(& :id).each do |booking| %>
+                  <div class="active-booking-details">
+                    <strong><p>Booking Reference: <%= booking.id %></p></strong>
+                    <p>Renter: <%= booking.user.first_name %> <%= booking.user.last_name %></p>
+                    <p>Booking Dates: <%= booking.start_date.strftime('%b %d %Y') %> - <%= booking.end_date.strftime('%b %d %Y') %></p>
+                  </div>
+              <% end %>
+            <% else %>
+              <p class="text-start">There are no active bookings for your car</p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="must-login"><h3><%= link_to 'Log in', new_user_session_path %> to book a car</h3></div>
+    <% end %>
+  </div>
+</div>
