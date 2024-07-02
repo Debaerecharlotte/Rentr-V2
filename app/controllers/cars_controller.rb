@@ -3,12 +3,18 @@ class CarsController < ApplicationController
 
   def index
     @cars = Car.all
-    if params[:start_date].present?
-      start_date = params[:start_date]
-      end_date = params[:end_date]
+    if params[:start_date].present? && params[:end_date].present?
+      start_date = params[:start_date].to_date
+      end_date = params[:end_date].to_date
       @car_ids = @cars.reject do |car|
-        car.bookings.pluck(:start_date, :end_date).map {|date| (date[0]..date[1]).to_a }.flatten.include?(start_date.to_date) || car.bookings.pluck(:start_date, :end_date).map {|date| (date[0]..date[1]).to_a }.flatten.include?(end_date.to_date)
-      end.map {|car| car.id }
+        car.bookings.any? do |booking|
+          booking_range = booking.start_date..booking.end_date
+          booking_range.cover?(start_date.to_date) || booking_range.cover?(end_date.to_date) || (start_date.to_date..end_date.to_date).cover?(booking.start_date) || (start_date.to_date..end_date.to_date).cover?(booking.end_date)
+        end
+      end.map(&:id)
+      #@car_ids = @cars.reject do |car|
+      #  car.bookings.pluck(:start_date, :end_date).map { |date| (date[0]..date[1]).to_a }.flatten.include?(start_date.to_date) || car.bookings.pluck(:start_date, :end_date).map { |date| (date[0]..date[1]).to_a }.flatten.include?(end_date.to_date)
+      #end.map { |car| car.id }
       @cars = Car.where(id: @car_ids)
     end
 
