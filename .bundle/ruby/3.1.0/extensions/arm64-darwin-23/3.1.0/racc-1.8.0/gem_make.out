@@ -1,0 +1,19 @@
+current directory: /Users/charlottedebaere/code/Debaerecharlotte/Rentr-V2/.bundle/ruby/3.1.0/gems/racc-1.8.0/ext/racc/cparse
+/Users/charlottedebaere/.rbenv/versions/3.1.2/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/charlottedebaere/code/Debaerecharlotte/Rentr-V2/.bundle/ruby/3.1.0/gems/racc-1.8.0/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20240702-34234-rcibkb sitelibdir\=./.gem.20240702-34234-rcibkb clean
+
+current directory: /Users/charlottedebaere/code/Debaerecharlotte/Rentr-V2/.bundle/ruby/3.1.0/gems/racc-1.8.0/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20240702-34234-rcibkb sitelibdir\=./.gem.20240702-34234-rcibkb
+compiling cparse.c
+linking shared-object racc/cparse.bundle
+ld: warning: -multiply_defined is obsolete
+
+current directory: /Users/charlottedebaere/code/Debaerecharlotte/Rentr-V2/.bundle/ruby/3.1.0/gems/racc-1.8.0/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20240702-34234-rcibkb sitelibdir\=./.gem.20240702-34234-rcibkb install
+/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20240702-34234-rcibkb/racc
+
+current directory: /Users/charlottedebaere/code/Debaerecharlotte/Rentr-V2/.bundle/ruby/3.1.0/gems/racc-1.8.0/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20240702-34234-rcibkb sitelibdir\=./.gem.20240702-34234-rcibkb clean
