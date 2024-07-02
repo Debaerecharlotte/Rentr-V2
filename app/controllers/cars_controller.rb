@@ -12,9 +12,6 @@ class CarsController < ApplicationController
           booking_range.cover?(start_date.to_date) || booking_range.cover?(end_date.to_date) || (start_date.to_date..end_date.to_date).cover?(booking.start_date) || (start_date.to_date..end_date.to_date).cover?(booking.end_date)
         end
       end.map(&:id)
-      #@car_ids = @cars.reject do |car|
-      #  car.bookings.pluck(:start_date, :end_date).map { |date| (date[0]..date[1]).to_a }.flatten.include?(start_date.to_date) || car.bookings.pluck(:start_date, :end_date).map { |date| (date[0]..date[1]).to_a }.flatten.include?(end_date.to_date)
-      #end.map { |car| car.id }
       @cars = Car.where(id: @car_ids)
     end
 
@@ -22,8 +19,8 @@ class CarsController < ApplicationController
       {
         lat: car.latitude,
         lng: car.longitude,
-        info_window_html: render_to_string(partial: "info_window", locals: {car: car}),
-        marker_html: render_to_string(partial: "marker", locals: {car: car})
+        info_window_html: render_to_string(partial: 'info_window', locals: { car: car }),
+        marker_html: render_to_string(partial: 'marker', locals: { car: car })
       }
     end
   end
